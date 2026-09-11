@@ -1196,6 +1196,73 @@
   background: #fff;
 }
 
+.rx-print-preview .rx-print-header {
+  background: linear-gradient(120deg, #0f766e 0%, #155e75 52%, #164e63 100%);
+  color: #fff;
+  border-bottom: 4px solid #0b5f5a;
+}
+
+.rx-print-header-content {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.rx-print-doctor {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.rx-print-doctor > div:last-child,
+.rx-print-contact {
+  min-width: 0;
+}
+
+.rx-print-mark {
+  display: grid;
+  width: 3.6rem;
+  height: 3.6rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 2px solid rgba(255, 255, 255, 0.75);
+  border-radius: 999px;
+  color: #d9fffa;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2.45rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.rx-print-header h1 {
+  color: #fff;
+  font-size: 1.4rem;
+}
+
+.rx-print-header p {
+  margin: 0.12rem 0;
+}
+
+.rx-print-header .text-teal-100,
+.rx-print-header .text-teal-200,
+.rx-print-contact {
+  color: #d9f5f1 !important;
+}
+
+.rx-print-header .text-white {
+  color: #fff !important;
+}
+
+.rx-print-contact {
+  flex: 0 1 18rem;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
 .rx-print-preview .text-sm {
   font-size: 0.98rem !important;
   line-height: 1.45;
@@ -1472,5 +1539,28 @@
 @media (max-width: 380px) {
   .rx-print-patient-grid {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .rx-print-header-content {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .rx-print-contact {
+    width: 100%;
+    flex-basis: auto;
+    text-align: left !important;
+  }
+
+  .rx-print-mark {
+    width: 3rem;
+    height: 3rem;
+    font-size: 2rem;
+  }
+
+  .rx-print-header h1 {
+    font-size: 1.15rem;
   }
 }
