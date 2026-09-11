@@ -585,8 +585,8 @@ function PrintView({ rx, doctor, settings, qrDataUrl, adminQrEnabled = true, nex
           </div>
 
           {/* Body — two columns: clinical findings (left) | Rx medicines (right) */}
-          <div className="flex border-b-2 border-gray-800" style={{ minHeight: "120mm" }}>
-            <div className="w-1/3 pr-3 py-3 border-r border-gray-300 space-y-3 text-sm">
+          <div className="rx-print-body flex border-b-2 border-gray-800" style={{ minHeight: "120mm" }}>
+            <div className="rx-print-clinical w-1/3 pr-3 py-3 border-r border-gray-300 space-y-3 text-sm">
               <div className="text-xs text-gray-500">{L.visitNo}</div>
               {rx.chiefComplaint && (
                 <div>
@@ -624,18 +624,18 @@ function PrintView({ rx, doctor, settings, qrDataUrl, adminQrEnabled = true, nex
                 </div>
               )}
             </div>
-            <div className="w-2/3 pl-5 py-3">
+            <div className="rx-print-medicines w-2/3 pl-5 py-3">
               <div className="rx-print-symbol mb-2" aria-label="Rx">℞</div>
               <div className="space-y-3">
                 {rx.items?.map((item: any, i: number) => (
                      <div key={item.id ?? `${item.medicineName}-${i}`} className="rx-print-medicine flex gap-2 items-start">
                     <span className="font-semibold text-sm w-5 shrink-0">{i+1}.</span>
                      <div className="min-w-0 flex-1">
-                       <div className="font-bold text-sm break-words">
+                        <div className="rx-print-medicine-name font-bold text-sm break-words">
                         {item.dosageForm ? `${item.dosageForm}. ` : ""}{item.medicineName}{item.strength ? ` ${item.strength}` : ""}
                         {item.genericName && <span className="font-normal text-xs text-gray-500"> ({item.genericName})</span>}
                       </div>
-                       <div className="text-sm text-gray-700 break-words">
+                        <div className="rx-print-medicine-details text-sm text-gray-700 break-words">
                         {[item.dose, item.mealTiming, item.duration].filter(Boolean).join(" — ")}
                         {item.instruction && <span className="italic text-gray-600"> ({item.instruction})</span>}
                       </div>
