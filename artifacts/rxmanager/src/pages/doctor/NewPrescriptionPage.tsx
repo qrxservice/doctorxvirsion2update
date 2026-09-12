@@ -832,6 +832,7 @@ export default function NewPrescriptionPage() {
   // ── UI toggles
   const [showLoadPatient, setShowLoadPatient] = useState(false);
   const [showMedicineComposer, setShowMedicineComposer] = useState(false);
+  const [headerCollapsed, setHeaderCollapsed] = useState(false);
   const [patientSearch, setPatientSearch] = useState("");
   const [showQueue, setShowQueue] = useState(false);
   const [showTemplates, setShowTemplates] = useState(false);
@@ -1080,6 +1081,25 @@ export default function NewPrescriptionPage() {
     }, 500);
     return () => clearTimeout(timer);
   }, [prescriptionDraftStorageKey, mode, recoveryDraft, patient, currentMed, medicines, advice, treatmentNote, followUpDate, diagnosis]);
+
+  // Collapse the large doctor header while the writing area scrolls down and
+  // bring it back when the doctor scrolls up.
+  useEffect(() => {
+    const viewports = Array.from(
+      document.querySelectorAll<HTMLElement>(".rx-shell [data-radix-scroll-area-viewport]"),
+    );
+    if (viewports.length === 0) return;
+    let lastTop = 0;
+    const handleScroll = (event: Event) => {
+      const viewport = event.currentTarget as HTMLElement;
+      const nextTop = viewport.scrollTop;
+      if (Math.abs(nextTop - lastTop) < 3) return;
+      setHeaderCollapsed(nextTop > lastTop && nextTop > 24);
+      lastTop = nextTop;
+    };
+    viewports.forEach(viewport => viewport.addEventListener("scroll", handleScroll, { passive: true }));
+    return () => viewports.forEach(viewport => viewport.removeEventListener("scroll", handleScroll));
+  }, []);
 
   // Patient list = unique patients from this doctor's prescription history,
   // scoped to the selected loader date (only patients seen on that date).
@@ -2237,7 +2257,10 @@ export default function NewPrescriptionPage() {
     <div className="rx-shell rx-reference-mode h-screen min-w-0 flex flex-col bg-background overflow-hidden">
 
       {/* ══ REFERENCE-STYLE HEADER ═════════════════════════════════════ */}
-      <header className="rx-topbar rx-reference-header min-w-0 shrink-0 border-b bg-background px-3 py-2 print:hidden z-20 relative">
+      <header className={cn(
+        "rx-topbar rx-reference-header min-w-0 shrink-0 border-b bg-background px-3 py-2 print:hidden z-20 relative",
+        headerCollapsed && "is-scroll-collapsed",
+      )}>
         <div className="rx-doctor-identity rx-doctor-identity-left min-w-0">
           <div className="rx-screen-doctor-brand">
             <div className="rx-screen-doctor-mark" aria-hidden="true">℞</div>
@@ -2294,6 +2317,7 @@ export default function NewPrescriptionPage() {
            <Plus className="h-3.5 w-3.5" />{L.navNewRx}
          </Button>
          <NavBtn href="/doctor/dashboard" icon={<LayoutDashboard className="h-3 w-3" />} label={L.navDashboard} />
+          <NavBtn href="/doctor/prescriptions" icon={<ClipboardList className="h-3 w-3" />} label="Prescription Management" />
          <Button variant="ghost" size="sm" className="h-7 shrink-0 px-2 text-xs gap-1" onClick={() => setShowHeaderDlg(true)}>
            <Settings2 className="h-3.5 w-3.5" /><span>{L.headerSettings}</span>
          </Button>
@@ -3060,6 +3084,17 @@ export default function NewPrescriptionPage() {
                       </div>
                     )}
                   </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="h-8 shrink-0 gap-1 border-teal-200 bg-white px-2 text-xs text-teal-800 hover:bg-teal-50"
+                    onClick={() => setShowMedicineComposer(false)}
+                    aria-label={isBn ? "ওষুধ লেখার অংশ লুকান" : "Hide medicine composer"}
+                  >
+                    <EyeOff className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline">{isBn ? "লুকান" : "Hide"}</span>
+                  </Button>
                 </div>
                 <div className="rx-medicine-composer-body p-3 space-y-2.5 bg-background">
                   {editingMedicineId && (

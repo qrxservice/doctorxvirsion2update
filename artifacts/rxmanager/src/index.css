@@ -784,6 +784,20 @@
   min-height: 5.2rem;
   background: var(--rx-reference-header-bg);
   color: var(--rx-reference-header-ink);
+  max-height: 14rem;
+  overflow: hidden;
+  transition: max-height 180ms ease, opacity 180ms ease, padding 180ms ease, transform 180ms ease;
+}
+
+.rx-reference-mode .rx-reference-header.is-scroll-collapsed {
+  max-height: 0;
+  min-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-bottom-width: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-100%);
 }
 
 .rx-reference-mode .rx-doctor-identity {
@@ -896,7 +910,7 @@
 }
 
 .rx-reference-mode .rx-reference-toolbar-secondary {
-  display: none;
+  display: flex;
 }
 
 .rx-reference-mode .rx-queue-strip {
